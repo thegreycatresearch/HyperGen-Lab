@@ -104,7 +104,13 @@ export type ProteinRecord = {
 };
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`/api${path}`, {
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/+$/, "") ?? "";
+  if (import.meta.env.PROD && !apiBaseUrl) {
+    throw new Error(
+      "La API no está configurada. GitHub Pages solo aloja la interfaz estática; configura VITE_API_BASE_URL para conectar un backend.",
+    );
+  }
+  const response = await fetch(`${apiBaseUrl}/api${path}`, {
     ...init,
     headers: { "Content-Type": "application/json", ...init?.headers },
   });

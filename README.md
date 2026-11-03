@@ -35,6 +35,18 @@ Abre la URL que muestra Vite (normalmente `http://localhost:5173`). La API está
 
 La base se crea como `hypergen_lab.sqlite3` en el directorio de datos local (por defecto `./data`). No se suben datos de investigación personales. Solo se envían a NCBI las consultas que se introducen explícitamente en las búsquedas externas.
 
+## Publicar la interfaz en GitHub Pages
+
+El workflow [`.github/workflows/pages.yml`](./.github/workflows/pages.yml) compila y publica la interfaz estática en cada push a `main` (o manualmente desde **Actions**). Para habilitar Pages:
+
+1. En GitHub, abre **Settings → Pages** y selecciona **GitHub Actions** como fuente de publicación.
+2. Sube estos cambios a la rama `main` y revisa el workflow **Deploy static frontend to GitHub Pages** en **Actions**.
+3. La URL del sitio para este repositorio será `https://thegreycatresearch.github.io/HyperGen-Lab/`.
+
+**Límite importante:** GitHub Pages solo sirve archivos estáticos; no ejecuta FastAPI ni SQLite. Sin backend, la interfaz se abre, pero las búsquedas y los datos guardados muestran claramente que falta configurar la API. Para habilitarlos, despliega el backend en un servicio compatible con FastAPI, define la variable de repositorio `VITE_API_BASE_URL` (URL HTTPS del backend) y configura `FRONTEND_ORIGINS` en ese backend con el origen del sitio Pages. La URL se incorpora al bundle público; no guardes claves ni credenciales allí. No expongas una base de investigación privada en un backend público. La app no incluye datos de investigación en el bundle.
+
+El repositorio puede tener reglas de acceso/visibilidad para Pages según la configuración y el plan de GitHub; verifica quién puede acceder al sitio antes de publicar.
+
 ## Variables de entorno
 
 Consulta [`.env.example`](./.env.example). `DATABASE_URL` permite usar PostgreSQL sin cambiar los modelos. No se requieren claves privadas para las integraciones incluidas.
